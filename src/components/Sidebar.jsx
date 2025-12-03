@@ -120,7 +120,7 @@ const Sidebar = ({
                         <div className="status-card" onClick={toggleVisited}
                              style={{
                                  background: selectedPlace.visited ? 'rgba(40, 167, 69, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                                 border: 1px solid ${selectedPlace.visited ? '#28a745' : '#666'}
+                                 border: `1px solid ${selectedPlace.visited ? '#28a745' : '#666'}`
                              }}>
                             <span>Estado: <strong className={selectedPlace.visited ? "text-visited" : "text-pending"}>
                                 {selectedPlace.visited ? "Visitado" : "Por visitar"}
@@ -146,13 +146,13 @@ const Sidebar = ({
             {/* PESTAÑAS */}
             <div className="btn-group" style={{marginBottom: '20px'}}>
                 <button 
-                    className={btn ${activeTab === 'places' ? 'btn-primary' : 'btn-cancel'}}
+                    className={`btn ${activeTab === 'places' ? 'btn-primary' : 'btn-cancel'}`}
                     onClick={() => setActiveTab('places')}
                 >
                     Lugares
                 </button>
                 <button 
-                    className={btn ${activeTab === 'zones' ? 'btn-primary' : 'btn-cancel'}}
+                    className={`btn ${activeTab === 'zones' ? 'btn-primary' : 'btn-cancel'}`}
                     onClick={() => setActiveTab('zones')}
                 >
                     Zonas
@@ -187,7 +187,7 @@ const Sidebar = ({
                         {(!zones || zones.length === 0) && <p style={{color:'#777', textAlign: 'center'}}>Usa la herramienta para dibujar.</p>}
                         {zones && zones.filter(z => z.name.toLowerCase().includes(searchTerm.toLowerCase())).map(zone => (
                             <div key={zone._id} className="list-item" onClick={() => setSelectedZone(zone)}
-                                style={{ borderLeft: 5px solid ${zone.color} }}>
+                                style={{ borderLeft: `5px solid ${zone.color}` }}>
                                 <strong style={{display: 'block', color: 'white'}}>{zone.name}</strong>
                                 <span style={{fontSize: '0.8rem', color: '#aaa'}}>Zona</span>
                             </div>
