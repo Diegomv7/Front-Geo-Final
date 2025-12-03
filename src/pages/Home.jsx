@@ -48,14 +48,15 @@ const Home = () => {
 
     const token = localStorage.getItem('token');
     const config = { headers: { 'x-auth-token': token } };
+    const API_URL = import.meta.env.VITE_API_URL;
 
     // --- CARGA DE DATOS ---
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resPlaces = await axios.get('http://localhost:4000/api/places', config);
+                const resPlaces = await axios.get(`${API_URL}/api/places`, config);
                 setPlaces(resPlaces.data);
-                const resZones = await axios.get('http://localhost:4000/api/zones', config);
+                const resZones = await axios.get(`${API_URL}/api/zones`, config);
                 setZones(resZones.data);
             } catch (error) {
                 if(error.response && error.response.status === 401) {
@@ -107,7 +108,7 @@ const Home = () => {
         if (!createForm.name) return alert("El nombre es obligatorio");
         try {
             const body = { name: createForm.name, description: createForm.description || "Sin descripción", latitude: newPlacePos.lat, longitude: newPlacePos.lng, visited: false };
-            const res = await axios.post('http://localhost:4000/api/places', body, config);
+            const res = await axios.post(`${API_URL}/api/places`, body, config);
             setPlaces([...places, res.data]); 
             setIsCreating(false); setNewPlacePos(null);
         } catch (error) { alert('Error al guardar'); }
@@ -115,7 +116,7 @@ const Home = () => {
 
     const saveEdit = async () => {
         try {
-            const res = await axios.put(`http://localhost:4000/api/places/${selectedPlace._id}`, editForm, config);
+            const res = await axios.put(`${API_URL}/api/places/${selectedPlace._id}`, editForm, config);
             const updated = res.data;
             setPlaces(places.map(p => p._id === updated._id ? updated : p));
             setSelectedPlace(updated);
@@ -126,7 +127,7 @@ const Home = () => {
     const deletePlace = async (id) => {
         if (!window.confirm("¿Eliminar lugar?")) return;
         try {
-            await axios.delete(`http://localhost:4000/api/places/${id}`, config);
+            await axios.delete(`${API_URL}/api/places/${id}`, config);
             setPlaces(places.filter(place => place._id !== id));
             setSelectedPlace(null); 
         } catch (error) { alert('Error'); }
@@ -134,7 +135,7 @@ const Home = () => {
 
     const toggleVisited = async () => {
         try {
-            const res = await axios.put(`http://localhost:4000/api/places/${selectedPlace._id}`, { visited: !selectedPlace.visited }, config);
+            const res = await axios.put(`${API_URL}/api/places/${selectedPlace._id}`, { visited: !selectedPlace.visited }, config);
             const updated = res.data;
             setPlaces(places.map(p => p._id === updated._id ? updated : p));
             setSelectedPlace(updated);
@@ -153,7 +154,7 @@ const Home = () => {
                 if (!name) { e.layer.remove(); return; }
                 try {
                     const body = { name, color: '#3388ff', coordinates: [coordinates] };
-                    const res = await axios.post('http://localhost:4000/api/zones', body, config);
+                    const res = await axios.post(`${API_URL}/api/zones`, body, config);
                     setZones([...zones, res.data]);
                     e.layer.remove();
                 } catch (error) { alert('Error al guardar zona'); }
@@ -166,15 +167,12 @@ const Home = () => {
         layers.eachLayer(async (layer) => {
             const zoneId = layer.options.id; 
             if(zoneId) {
-                // Obtenemos las nuevas coordenadas dibujadas
                 const rawLatLngs = layer.getLatLngs()[0];
                 const newCoordinates = rawLatLngs.map(point => [point.lng, point.lat]);
                 newCoordinates.push(newCoordinates[0]);
 
                 try {
-                    // Enviamos al backend
-                    const res = await axios.put(`http://localhost:4000/api/zones/${zoneId}`, { coordinates: [newCoordinates] }, config);
-                    // Actualizamos estado local
+                    const res = await axios.put(`${API_URL}/api/zones/${zoneId}`, { coordinates: [newCoordinates] }, config);
                     const updated = res.data;
                     setZones(prevZones => prevZones.map(z => z._id === updated._id ? updated : z));
                     console.log("Forma actualizada en BD");
@@ -187,7 +185,7 @@ const Home = () => {
 
     const saveZoneEdit = async () => {
         try {
-            const res = await axios.put(`http://localhost:4000/api/zones/${selectedZone._id}`, zoneForm, config);
+            const res = await axios.put(`${API_URL}/api/zones/${selectedZone._id}`, zoneForm, config);
             const updated = res.data;
             setZones(zones.map(z => z._id === updated._id ? updated : z));
             setSelectedZone(updated);
@@ -198,7 +196,7 @@ const Home = () => {
     const deleteZone = async (id) => {
         if (!window.confirm("¿Eliminar esta zona?")) return;
         try {
-            await axios.delete(`http://localhost:4000/api/zones/${id}`, config);
+            await axios.delete(`${API_URL}/api/zones/${id}`, config);
             setZones(zones.filter(z => z._id !== id));
             setSelectedZone(null);
         } catch (error) { alert('Error al eliminar'); }

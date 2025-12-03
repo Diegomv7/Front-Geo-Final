@@ -18,8 +18,9 @@ const Register = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
+      const API_URL = import.meta.env.VITE_API_URL;
       const res = await axios.post(
-        'http://localhost:4000/api/users/registro',
+        `${API_URL}/api/users/registro`,
         formData
       );
 
