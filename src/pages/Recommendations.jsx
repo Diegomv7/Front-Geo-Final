@@ -118,7 +118,8 @@ const Recommendations = () => {
     const handleAdd = async (place) => {
         try {
             const config = { headers: { 'x-auth-token': token } };
-            await axios.post('http://localhost:4000/api/places', {
+            const API_URL = import.meta.env.VITE_API_URL;
+            await axios.post(`${API_URL}/api/places`, {
                 name: place.name,
                 description: place.description,
                 latitude: place.latitude,

@@ -19,7 +19,7 @@ const Sidebar = ({
     saveZoneEdit, deleteZone
 }) => {
     
-    const navigate = useNavigate(); // <--- 2. INICIALIZAMOS EL HOOK AQUÍ
+    const navigate = useNavigate();
 
     // --- 1. MODO CREACIÓN (Lugar) ---
     if (isCreating) {
@@ -196,7 +196,7 @@ const Sidebar = ({
                 )}
             </div>
 
-            {/* BOTÓN RECOMENDACIONES (3ra Vista) */}
+            {/* BOTÓN RECOMENDACIONES */}
             <button 
                 className="btn btn-recommendations"
                 onClick={() => navigate('/recommendations')} 
